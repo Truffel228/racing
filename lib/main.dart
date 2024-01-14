@@ -48,6 +48,7 @@ class IPage extends StatefulWidget {
 class _IPageState extends State<IPage> {
   String? _racer;
   var _onB = false;
+  var _loading = true;
   @override
   void initState() {
     super.initState();
@@ -61,6 +62,7 @@ class _IPageState extends State<IPage> {
     if (!racer.contains('isRacer')) {
       setState(() {
         _racer = racer;
+        _loading = false;
       });
       return;
     }
@@ -69,9 +71,14 @@ class _IPageState extends State<IPage> {
     if (!onBoardingDone) {
       setState(() {
         _onB = true;
+        _loading = false;
       });
       return;
     }
+
+    setState(() {
+      _loading = false;
+    });
   }
 
   @override
@@ -82,6 +89,16 @@ class _IPageState extends State<IPage> {
 
     if (_onB) {
       return const OnFirstBoarding();
+    }
+
+    if (_loading) {
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
+      );
     }
 
     return const GeneralPage();

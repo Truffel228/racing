@@ -85,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             shape: BoxShape.circle,
                             color: CTheme.darkColor,
                           ),
-                          child: Icon(Icons.photo, color: CTheme.whiteColor),
+                          child: const Icon(Icons.photo, color: CTheme.whiteColor),
                         ),
                       )
                     : CircleAvatar(
