@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:racing/c_theme.dart';
+import 'package:racing/pages/favorite_news/favorite_news_page.dart';
+import 'package:racing/pages/notes/notes_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -85,7 +87,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             shape: BoxShape.circle,
                             color: CTheme.darkColor,
                           ),
-                          child: const Icon(Icons.photo, color: CTheme.whiteColor),
+                          child:
+                              const Icon(Icons.photo, color: CTheme.whiteColor),
                         ),
                       )
                     : CircleAvatar(
@@ -183,32 +186,39 @@ class _ProfilePageState extends State<ProfilePage> {
                 Expanded(
                   child: AspectRatio(
                     aspectRatio: 1,
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        color: CTheme.darkGreyColor,
+                    child: GestureDetector(
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const NotesPage(),
+                        ),
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SvgPicture.asset('images/list_icon.svg'),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Expanded(
-                                child: Text(
-                                  'My notes',
-                                  style: TextStyle(
-                                    color: CTheme.whiteColor,
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: CTheme.darkGreyColor,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SvgPicture.asset('images/list_icon.svg'),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Expanded(
+                                  child: Text(
+                                    'My notes',
+                                    style: TextStyle(
+                                      color: CTheme.whiteColor,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SvgPicture.asset('images/arrow_right.svg'),
-                            ],
-                          ),
-                        ],
+                                SvgPicture.asset('images/arrow_right.svg'),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -217,32 +227,39 @@ class _ProfilePageState extends State<ProfilePage> {
                 Expanded(
                   child: AspectRatio(
                     aspectRatio: 1,
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        color: CTheme.darkGreyColor,
+                    child: GestureDetector(
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const FavoriteNewsPage(),
+                        ),
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SvgPicture.asset('images/favorite_icon.svg'),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Expanded(
-                                child: Text(
-                                  'Favorite news',
-                                  style: TextStyle(
-                                    color: CTheme.whiteColor,
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: CTheme.darkGreyColor,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SvgPicture.asset('images/favorite_icon.svg'),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Expanded(
+                                  child: Text(
+                                    'Favorite news',
+                                    style: TextStyle(
+                                      color: CTheme.whiteColor,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SvgPicture.asset('images/arrow_right.svg'),
-                            ],
-                          ),
-                        ],
+                                SvgPicture.asset('images/arrow_right.svg'),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

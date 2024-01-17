@@ -1,13 +1,40 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:json_annotation/json_annotation.dart';
+
+part 'new_model.g.dart';
+
+@JsonSerializable(fieldRename: FieldRename.snake)
 class NewModel {
   const NewModel({
     required this.url,
     required this.text,
     required this.date,
+    this.isFavorite = false,
   });
 
   final String url;
   final String text;
   final DateTime date;
+  final bool isFavorite;
+
+  factory NewModel.fromJson(Map<String, dynamic> json) =>
+      _$NewModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$NewModelToJson(this);
+
+  NewModel copyWith({
+    String? url,
+    String? text,
+    DateTime? date,
+    bool? isFavorite,
+  }) {
+    return NewModel(
+      url: url ?? this.url,
+      text: text ?? this.text,
+      date: date ?? this.date,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
+  }
 }
 
 final List<NewModel> news = [
@@ -16,7 +43,7 @@ final List<NewModel> news = [
         'https://cdn-2.motorsport.com/images/amp/68ygMOQ0/s1200/lando-norris-mclaren-2nd-posit.webp',
     text:
         'Stella took over from the Audi-bound Andreas Seidl at the start of 2023 and was praised for steering the team in a different direction, implementing an overhauled technical structure in Woking while also proving to be a candid figurehead for the team towards the general public and the press.\n\nOnce it became clear McLaren had completely missed its launch targets for 2023, Stella was quick to explain where the team had gone wrong and what his plan was to get its season back on track\n\nWhen asked by Autosport if his blunt honesty was a deliberate strategy, Stella replied: "I have a very simple strategy: just say things as they are. It’s very simple. It puts you in a solid place.',
-    date: DateTime(2024, 9, 14, 15, 32),
+    date: DateTime(2024, 1, 18, 15, 32),
   ),
   NewModel(
     url:

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:racing/c_theme.dart';
+import 'package:racing/data/controllers/news_controller.dart';
 import 'package:racing/data/new_model.dart';
 
 class NewsPage extends StatefulWidget {
@@ -13,7 +15,7 @@ class NewsPage extends StatefulWidget {
 
 class _NewsPageState extends State<NewsPage> {
   final TextEditingController _controller = TextEditingController();
-  List<NewModel> _news = news;
+  var _query = '';
 
   @override
   void initState() {
@@ -23,11 +25,7 @@ class _NewsPageState extends State<NewsPage> {
 
   void _listener() {
     setState(() {
-      _news = news
-          .where((element) => element.text
-              .toLowerCase()
-              .contains(_controller.text.toLowerCase()))
-          .toList();
+      _query = _controller.text.toLowerCase();
     });
   }
 
@@ -95,15 +93,23 @@ class _NewsPageState extends State<NewsPage> {
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                itemCount: _news.length,
-                itemBuilder: (context, index) {
-                  final n = _news[index];
+              child: Consumer<NewsController>(
+                  builder: (context, controller, child) {
+                final news = controller.allNews
+                    .where((element) =>
+                        element.text.toLowerCase().contains(_query))
+                    .toList();
 
-                  return NItem(newModel: n);
-                },
-              ),
+                return ListView.builder(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  itemCount: news.length,
+                  itemBuilder: (context, index) {
+                    final n = news[index];
+
+                    return NItem(newModel: n);
+                  },
+                );
+              }),
             ),
           ],
         ),
@@ -112,19 +118,10 @@ class _NewsPageState extends State<NewsPage> {
   }
 }
 
-class NItem extends StatefulWidget {
+class NItem extends StatelessWidget {
   const NItem({super.key, required this.newModel});
   final NewModel newModel;
 
-  @override
-  State<NItem> createState() => _NItemState();
-}
-
-class _NItemState extends State<NItem> {
-  var _selected = false;
-  void _toogleSelected() => setState(() {
-        _selected = !_selected;
-      });
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -140,7 +137,7 @@ class _NItemState extends State<NItem> {
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.network(
-                widget.newModel.url,
+                newModel.url,
                 height: 80,
                 width: 120,
               ),
@@ -164,21 +161,22 @@ class _NItemState extends State<NItem> {
                           color: CTheme.darkColor,
                         ),
                         child: Text(
-                          DateFormat('dd MMM yyyy HH:mm')
-                              .format(widget.newModel.date),
+                          DateFormat('dd MMM yyyy HH:mm').format(newModel.date),
                           style: const TextStyle(color: CTheme.textGreyColor),
                         ),
                       ),
                       InkWell(
-                        onTap: _toogleSelected,
-                        child: SvgPicture.asset(_selected
+                        onTap: () {
+                          context.read<NewsController>().likeNewModel(newModel);
+                        },
+                        child: SvgPicture.asset(newModel.isFavorite
                             ? 'images/favorite_active.svg'
                             : 'images/favorite.svg'),
                       ),
                     ],
                   ),
                   Text(
-                    widget.newModel.text,
+                    newModel.text,
                     style: const TextStyle(color: CTheme.whiteColor),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,

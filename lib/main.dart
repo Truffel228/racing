@@ -2,7 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:provider/provider.dart';
 import 'package:racing/c_theme.dart';
+import 'package:racing/data/controllers/news_controller.dart';
+import 'package:racing/data/controllers/notes_controller.dart';
 import 'package:racing/domain/configuration.dart';
 import 'package:racing/domain/notifx.dart';
 import 'package:racing/general_page.dart';
@@ -21,19 +24,31 @@ void main() async {
   await FirebaseRemoteConfig.instance.fetchAndActivate();
 
   await NotificationsFb().activate();
+  final bd = await SharedPreferences.getInstance();
 
-  runApp(const MyApp());
+  runApp(MyApp(bd));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp(
+    this._bd, {
+    super.key,
+  });
+
+  final SharedPreferences _bd;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: CTheme.theme,
-      home: IPage(),
+    return ChangeNotifierProvider(
+      create: (context) => NewsController(_bd),
+      child: ChangeNotifierProvider(
+        create: (context) => NotesController(_bd),
+        child: MaterialApp(
+          title: 'Flutter Demo',
+          theme: CTheme.theme,
+          home: const IPage(),
+        ),
+      ),
     );
   }
 }
