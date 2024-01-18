@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:racing/c_theme.dart';
 import 'package:racing/data/controllers/news_controller.dart';
 import 'package:racing/data/new_model.dart';
+import 'package:racing/pages/news/new_page.dart';
 
 class NewsPage extends StatefulWidget {
   const NewsPage({super.key});
@@ -124,67 +125,77 @@ class NItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: CTheme.darkGreyColor,
+    return GestureDetector(
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => NewPage(newModel: newModel),
+        ),
       ),
-      child: IntrinsicHeight(
-        child: Row(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.network(
-                newModel.url,
-                height: 80,
-                width: 120,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: CTheme.darkGreyColor,
+        ),
+        child: IntrinsicHeight(
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(
+                  newModel.url,
+                  height: 80,
+                  width: 120,
+                ),
               ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 4,
-                          horizontal: 8,
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 4,
+                            horizontal: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: CTheme.darkColor,
+                          ),
+                          child: Text(
+                            DateFormat('dd MMM yyyy HH:mm')
+                                .format(newModel.date),
+                            style: const TextStyle(color: CTheme.textGreyColor),
+                          ),
                         ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: CTheme.darkColor,
+                        InkWell(
+                          onTap: () {
+                            context
+                                .read<NewsController>()
+                                .likeNewModel(newModel);
+                          },
+                          child: SvgPicture.asset(newModel.isFavorite
+                              ? 'images/favorite_active.svg'
+                              : 'images/favorite.svg'),
                         ),
-                        child: Text(
-                          DateFormat('dd MMM yyyy HH:mm').format(newModel.date),
-                          style: const TextStyle(color: CTheme.textGreyColor),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          context.read<NewsController>().likeNewModel(newModel);
-                        },
-                        child: SvgPicture.asset(newModel.isFavorite
-                            ? 'images/favorite_active.svg'
-                            : 'images/favorite.svg'),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    newModel.text,
-                    style: const TextStyle(color: CTheme.whiteColor),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
+                      ],
+                    ),
+                    Text(
+                      newModel.text,
+                      style: const TextStyle(color: CTheme.whiteColor),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
