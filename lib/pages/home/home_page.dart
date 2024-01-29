@@ -136,12 +136,12 @@ class RacingItem extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(4),
                         color: Colors.white,
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(
-                            racingModel.imageUrl,
-                          ),
-                        ),
+                      ),
+                      child: Image.network(
+                        racingModel.imageUrl,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) =>
+                            Container(),
                       ),
                     ),
                     const SizedBox(width: 8),
